@@ -76,3 +76,31 @@ Swagger UI → http://127.0.0.1:8000/docs
 ```powershell
 docker compose up --build
 ```
+
+## Phase 3 – CI/CD with GitHub Actions
+
+✅ Features implemented:
+- Added workflow file: `.github/workflows/build.yml`
+- Configured GitHub Actions to run on:
+  - Pull requests → lint + unit tests
+  - Push to `main` → lint + unit tests + Docker image build
+- Added real unit tests with `pytest`:
+  - `/health` endpoint returns `{"status": "ok"}`
+  - `/predict` endpoint returns `"Model not implemented yet"`
+- Configured linting with `flake8` for code quality checks
+- Docker images tagged with both:
+  - `autoops-ai:latest` (human-friendly)
+  - `autoops-ai:<commit-sha>` (traceable, reproducible)
+- Added `pytest.ini` to ensure imports resolve cleanly
+- CI/CD status badge added to README
+
+### Test the CI/CD Workflow
+
+1. **Trigger**  
+   - Create a Pull request → Runs tests & lint only  
+   - Push to main → Runs tests, lint, and builds Docker image  
+
+2. **Check pipeline status**  
+   - Go to your repo’s **Actions** tab  
+   - Select the workflow **“Test & Build Pipeline”**  
+   - View logs for lint, test, and Docker build steps  
