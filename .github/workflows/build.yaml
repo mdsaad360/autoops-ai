@@ -37,11 +37,40 @@ jobs:
       run:  flake8 app --count --select=E9,F63,F7,F82 --show-source --statistics
 
     # 6. Build Docker image (only on push to main)
-    - name: Build Docker image
+    # - name: Build Docker image
+    #   if: github.event_name == 'push'
+    #   run: |
+    #     docker build \
+    #     -t autoops-ai:latest \
+    #     -t autoops-ai:${{ github.sha }} \
+    #     .
+
+    # 6. Login to Docker Hub (only on push to main)
+    - name: Log in to Docker Hub
       if: github.event_name == 'push'
-      run: |
-        docker build \
-        -t autoops-ai:latest \
-        -t autoops-ai:${{ github.sha }} \
-        .
-    
+      uses: docker/login-action@v2
+      with:
+        username: ${{ vars.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    # 7. Build & Push Docker image to Docker Hub (only on push to main)
+    # - name: Build & Push Docker image
+    #   if: github.event_name == 'push'
+    #   run: |
+    #     docker build \
+    #     -t ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:latest \
+    #     -t ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:${{ github.sha }} \
+    #     .
+    #     docker push ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:latest
+    #     docker push ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:${{ github.sha }}
+
+    # 7. Build & Push Docker image to Docker Hub (only on push to main)
+    - name: Build & Push Docker image
+      if: github.event_name == 'push'
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: |
+          ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:latest
+          ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:${{ github.sha }}
