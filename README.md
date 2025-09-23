@@ -45,3 +45,34 @@ uvicorn app.main:app --reload
 Health check: http://127.0.0.1:8000/health
 
 Swagger UI: http://127.0.0.1:8000/docs
+
+## Phase 2 – Dockerized FastAPI App
+
+✅ Features implemented:
+- Added `Dockerfile` and `.dockerignore`
+- App runs inside a Docker container
+- Port mapping allows access from host at `127.0.0.1:8000`
+- Ready for future use with Kubernetes and AWS
+
+### Run with Docker
+
+1. **Build the image**
+```powershell
+docker build -t autoops-ai:1.0 .
+```
+
+2. **Run the container**
+```powershell
+docker run -d -p 8000:8000 autoops-ai:1.0
+```
+
+3. **Test endpoints**
+```
+Health check → http://127.0.0.1:8000/health
+Swagger UI → http://127.0.0.1:8000/docs
+```
+
+4. **Optional: Run with Docker Compose**
+```powershell
+docker compose up --build
+```
