@@ -103,4 +103,32 @@ docker compose up --build
 2. **Check pipeline status**  
    - Go to your repo’s **Actions** tab  
    - Select the workflow **“Test & Build Pipeline”**  
-   - View logs for lint, test, and Docker build steps  
+   - View logs for lint, test, and Docker build steps 
+
+## Phase 4 – Docker Hub Integration
+
+✅ Features implemented:
+- Updated CI/CD pipeline (`.github/workflows/build.yaml`) to build and push Docker images to **Docker Hub**.  
+- Added GitHub repository **Secrets** and **Variables**:
+  - `DOCKERHUB_USERNAME` (variable) → Docker Hub account name.  
+  - `DOCKERHUB_TOKEN` (secret) → Docker Hub personal access token.  
+- Used **official GitHub Actions (`docker/login-action` + `docker/build-push-action`)** for a clean, production-grade setup.  
+- Images are pushed with **two tags** for traceability:
+  - `latest` → always the most recent build.  
+  - `<commit-sha>` → uniquely tied to the exact commit (traceable + reproducible).
+
+### How to Verify
+1. Go to **Docker Hub** → [https://hub.docker.com/repositories/mdsaad360](https://hub.docker.com/repositories/mdsaad360)  
+2. Confirm `autoops-ai` repo exists and contains both `latest` and commit-specific tags.  
+3. Check GitHub Actions logs under the **“Build and Push Docker image”** step.
+
+### Run the Image
+```bash
+# Pull the latest image from Docker Hub
+docker pull mdsaad360/autoops-ai:latest
+
+# Run the container locally
+docker run -d -p 8000:8000 mdsaad360/autoops-ai:latest
+
+# Test the health endpoint
+curl http://localhost:8000/health
