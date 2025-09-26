@@ -6,8 +6,7 @@ __pycache__/
 *.db
 
 # Virtual environments
-venv/
-venv311/
+venv*/
 .env/
 
 # VS Code
