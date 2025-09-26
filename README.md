@@ -132,3 +132,67 @@ docker run -d -p 8000:8000 mdsaad360/autoops-ai:latest
 
 # Test the health endpoint
 curl http://localhost:8000/health
+```
+
+## Phase 5a – Dummy Predict Logic & Unit Testing
+
+✅ Features implemented:
+- Added a dummy sentiment analysis predict logic.
+- Added test case for predict endpoint for:
+  - `/predict` endpoint with mock sentiment analysis (positive/negative inputs).
+
+## How to Run Locally
+
+```bash
+# Pull docker image
+docker pull mdsaad360/autoops-ai:latest
+
+# Start the container
+docker run -d -p 8000:8000 mdsaad360/autoops-ai:latest
+
+# Test predict endpoint
+curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json" -d '{"text":"Even"}'
+
+curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json" -d '{"text":"Odd"}'
+```
+
+## Phase 5b – ML Inference Integration (Sentiment Analysis)
+
+✅ Features implemented:
+- Integrated a lightweight ML model using `Hugging Face Transformers`.
+- Installed additional dependencies: `transformers` and `torch`(CPU-only).
+- Updated FastAPI `/predict` endpoint to:
+  - Accept text input.
+  - Run it through `distilbert-base-uncased-finetuned-sst-2-english`.
+  - Return sentiment label (POSITIVE/NEGATIVE) and confidence score.
+- Extended test cases to verify model predictions (positive/negative).
+- Improved app logging for better observability during tests.
+
+## How to Run Locally
+
+```bash
+# Pull docker image
+docker pull mdsaad360/autoops-ai:latest
+
+# Start the container
+docker run -d -p 8000:8000 mdsaad360/autoops-ai:latest
+
+# Test predict endpoint
+curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json" -d '{"text":"I love coding!"}'
+
+curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json" -d '{"text":"I hate dragon fruit"}'
+```
+## Expected Ouput
+```json
+{
+  "input": "I love coding",
+  "label": "POSITIVE",
+  "score": 0.9996923208236694
+}
+
+{
+  "input": "I hate dragon fruit",
+  "label": "NEGATIVE",
+  "score": 0.9971433281898499
+}
+```

@@ -5,7 +5,7 @@ __pycache__/
 *.db
 *.log
 
-venv/
+venv*/
 .env/
 .git/
 .gitignore
