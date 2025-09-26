@@ -156,10 +156,10 @@ curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json"
 curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json" -d '{"text":"Odd"}'
 ```
 
-## Phase 5b – ML Inference Integration (Sentiment Analysis)
+## Phase 5b – Add AI Inference (Sentiment Analysis)
 
 ✅ Features implemented:
-- Integrated a lightweight ML model using `Hugging Face Transformers`.
+- Integrated  Hugging Face Transformers `pipeline("sentiment-analysis")`.
 - Installed additional dependencies: `transformers` and `torch`(CPU-only).
 - Updated FastAPI `/predict` endpoint to:
   - Accept text input.
@@ -196,3 +196,26 @@ curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json"
   "score": 0.9971433281898499
 }
 ```
+
+## Phase 5c –  Add pip Dependency and Docker Build Caching in CI/CD
+
+✅ Features implemented:
+- Optimized our CI/CD pipeline by caching Python dependencies. This prevents reinstalling the same packages on every run, reducing pipeline execution time.
+- Enabled **`Docker build caching`**. This reduces build times by reusing unchanged layers instead of rebuilding everything from scratch.
+
+## Phase 5d –  Add Dockerfile dev setup
+
+✅ Features implemented:
+- Added a separate **`Dockerfile.dev`** for local development:
+  - Uses `uvicorn --reload` for auto-restart on code changes
+  - Mounts source code into the container (`volumes`) so edits reflect immediately
+
+- Added **`docker-compose.override.yml`**:
+  - Overrides the default compose configuration only in local dev
+  - Automatically uses `Dockerfile.dev` instead of the production Dockerfile
+  - Runs the app in hot-reload mode
+
+-  Run in DEV mode:
+  ```bash
+  docker compose -f docker-compose.override.yml up --build
+  ```
