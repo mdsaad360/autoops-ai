@@ -11,7 +11,7 @@ AutoOps AI is a portfolio project demonstrating DevOps + MLOps practices:
 - 🐳 Containerization with **Docker**
 - ⚙️ CI/CD with **GitHub Actions** + GitOps via **ArgoCD**
 - 📊 Monitoring with **Prometheus** + **Grafana**
-- ☁️ Cloud-ready (AWS EKS + MWAA)
+- ☁️ Cloud-ready (AWS EKS)
 
 ## Phase 1 – Local FastAPI App
 
