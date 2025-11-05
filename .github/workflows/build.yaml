@@ -110,12 +110,10 @@ jobs:
       run: |
         cd ${{ vars.MANIFEST_PATH }}  # Change to cloned repo directory
         FILE="${{ vars.MANIFEST_PATH }}/${{ vars.MANIFEST_FILE }}"
-        ls -l $FILE
         chmod 644 $FILE
-        ls -l $FILE
         sed -i "s|image: .*|image: ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:${{ github.sha }}|g" $FILE
         git config --global user.email "github-actions@github.com"
         git config --global user.name "GitHub Actions"
-        git add "${{ vars.MANIFEST_FILE }}"
+        git add $FILE
         git commit -m "Update image tag to ${{ github.sha }}" || echo "No changes to commit"
         git push
