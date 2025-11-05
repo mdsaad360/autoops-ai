@@ -110,7 +110,6 @@ jobs:
       run: |
         cd ${{ vars.MANIFEST_PATH }}  # Change to cloned repo directory
         FILE="${{ vars.MANIFEST_PATH }}/${{ vars.MANIFEST_FILE }}"
-        chmod 644 $FILE
         sed -i "s|image: .*|image: ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:${{ github.sha }}|g" $FILE
         git config --global user.email "github-actions@github.com"
         git config --global user.name "GitHub Actions"
