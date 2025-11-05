@@ -115,11 +115,8 @@ jobs:
         echo "Now inside: $(pwd)"
         echo "Files in base directory:"
         ls -la
-        if [ ! -f "deployment.yaml" ]; then
-          echo "deployment.yaml not found in base/"
-          exit 1
-        fi
-        FILE="${{ vars.MANIFEST_FILE }}"
+        FILE="${{ vars.MANIFEST_PATH }}/${{ vars.MANIFEST_FILE }}"
+        $FILE
         sed -i "s|image: .*|image: ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:${{ github.sha }}|g" $FILE
         git config --global user.email "github-actions@github.com"
         git config --global user.name "GitHub Actions"
