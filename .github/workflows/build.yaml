@@ -72,6 +72,17 @@ jobs:
           network=host
 
     # 7. Build & Push Docker image to Docker Hub (only on push to main)
+    # - name: Build & Push Docker image
+    #   if: github.event_name == 'push'
+    #   run: |
+    #     docker build \
+    #     -t ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:latest \
+    #     -t ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:${{ github.sha }} \
+    #     .
+    #     docker push ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:latest
+    #     docker push ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:${{ github.sha }}
+
+    # 7. Build & Push Docker image to Docker Hub (only on push to main)
     - name: Build & Push Docker image
       if: github.event_name == 'push'
       uses: docker/build-push-action@v4
@@ -84,13 +95,24 @@ jobs:
         cache-from: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:buildcache
         cache-to: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:buildcache,mode=max
 
-    # 7. Build & Push Docker image to Docker Hub (only on push to main)
-    # - name: Build & Push Docker image
-    #   if: github.event_name == 'push'
-    #   run: |
-    #     docker build \
-    #     -t ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:latest \
-    #     -t ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:${{ github.sha }} \
-    #     .
-    #     docker push ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:latest
-    #     docker push ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:${{ github.sha }}
+    # 8. Checkout GitOps repo
+    - name: Checkout GitOps repository
+      if: github.event_name == 'push'
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ vars.MANIFESTS_REPO_NAME }}
+        token: ${{ secrets.MANIFESTS_REPO_TOKEN }}
+        path: ${{ vars.MANIFEST_PATH }}
+
+    # 9. Update image tag in k8s manifest and push to the gitops repo (autoops-ai-gitops)
+    - name: Update image tag in k8s manifests and push
+      if: github.event_name == 'push'
+      run: |
+        FILE="${{ vars.MANIFEST_PATH }}/${{ vars.MANIFEST_FILE }}"
+        sed -i "s|image: .*|image: ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:${{ github.sha }}|g" $FILE
+        cd ${{ vars.MANIFEST_PATH }}  # Change to repo directory
+        git config --global user.email "github-actions@github.com"
+        git config --global user.name "GitHub Actions"
+        git add "${{ vars.MANIFEST_FILE }}"
+        git commit -m "Update image tag to ${{ github.sha }}" || echo "No changes to commit"
+        git push
