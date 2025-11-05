@@ -108,15 +108,11 @@ jobs:
     - name: Update image tag in k8s manifests and push
       if: github.event_name == 'push'
       run: |
-        pwd
-        echo "Files in current directory:"
-        ls -la
-        cd ${{ vars.MANIFEST_PATH }}  # Change to repo directory
-        echo "Now inside: $(pwd)"
-        echo "Files in base directory:"
-        ls -la
+        cd ${{ vars.MANIFEST_PATH }}  # Change to cloned repo directory
         FILE="${{ vars.MANIFEST_PATH }}/${{ vars.MANIFEST_FILE }}"
-        $FILE
+        ls -l $FILE
+        chmod 644 $FILE
+        ls -l $FILE
         sed -i "s|image: .*|image: ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:${{ github.sha }}|g" $FILE
         git config --global user.email "github-actions@github.com"
         git config --global user.name "GitHub Actions"
