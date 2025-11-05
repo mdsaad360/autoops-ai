@@ -108,7 +108,17 @@ jobs:
     - name: Update image tag in k8s manifests and push
       if: github.event_name == 'push'
       run: |
+        pwd
+        echo "Files in current directory:"
+        ls -la
         cd ${{ vars.MANIFEST_PATH }}  # Change to repo directory
+        echo "Now inside: $(pwd)"
+        echo "Files in base directory:"
+        ls -la
+        if [ ! -f "deployment.yaml" ]; then
+          echo "deployment.yaml not found in base/"
+          exit 1
+        fi
         FILE="${{ vars.MANIFEST_FILE }}"
         sed -i "s|image: .*|image: ${{ vars.DOCKERHUB_USERNAME }}/autoops-ai:${{ github.sha }}|g" $FILE
         git config --global user.email "github-actions@github.com"
