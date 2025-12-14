@@ -234,3 +234,92 @@ curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json"
 - Exposed the application locally via NodePort.
 
 - Verified application behavior inside a Kubernetes runtime.
+
+## Phase 6b - Host autoops-ai on AWS EC2 (HTTP)
+
+✅ Features implemented:
+- Launched an EC2 Ubuntu instance (default VPC) with a public IP.
+
+- Used SSH key-based authentication.
+
+- Opened Security Group inbound ports: SSH (22) restricted to my IP, HTTP/testing port (8000) open as needed.
+
+- Installed and configured Docker on EC2.
+
+- Pulled autoops-ai image from Docker Hub.
+
+- Ran the container manually on EC2.
+
+- Exposed the application via EC2 public IP over HTTP.
+
+<img src="images/aws-ec2-autoops-ai-ub.png" alt="AWS EC2 Instance" width="800"/>
+
+## Setup Instructions
+
+### 1. Launch EC2 (Fast-track using default VPC)
+- AMI: Ubuntu 22.04
+
+- Instance type: t3.micro
+
+- Key pair: create / download .pem
+
+- Security Group inbound rules:
+
+  - SSH (22) — Source: My IP
+
+  - Custom TCP (8000) — Source: 0.0.0.0/0 (for testing)
+
+
+### 2. SSH into EC2
+```bash
+ssh -i ./your_key_name.pem ubuntu@<ec2_public_ip>
+```
+
+### 3. Install Docker & Compose
+```bash
+# 1. Update the package index
+sudo apt-get update
+
+# 2. Install necessary packages to allow apt to use a repository over HTTPS
+sudo apt-get install apt-transport-https ca-certificates curl software-properties-common -y
+
+# 3. Add Docker's official GPG key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+# 4. Set up the stable repository
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# 5. Update the package index again with the new repository data
+sudo apt-get update
+
+# 6. Install Docker Engine, CLI, and Containerd
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+
+# 7. Verify the installation
+sudo docker run hello-world
+```
+
+<img src="images/verify-docker-install.png" alt="Example verify output" width="800"/>
+
+```bash
+# 8. Manage Docker as a non-root user (For this change to take effect, you must log out of your SSH session and log back in. )
+sudo usermod -aG docker ${USER}
+```
+
+### 4. Deploy app
+```bash
+docker pull mdsaad360/autoops-ai:latest
+
+docker run -d -p 8000:8000 mdsaad360/autoops-ai:latest
+
+docker ps
+```
+
+<img src="images/docker-run-ec2.png" alt="Docker run on ec2" width="800"/>
+
+### 5. Verify the app
+```bash
+#Run below outside instance to verfiy the app is running
+curl http://<EC2_PUBLIC_IP>:8000/health
+```
+<img src="images/verify-app-8000.png" alt="Verify app is running" width="800"/>
