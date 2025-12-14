@@ -219,3 +219,18 @@ curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json"
   ```bash
   docker compose -f docker-compose.override.yaml up --build
   ```
+## Phase 6a - Local Kubernetes Simulation using Minikube
+
+✅ Features implemented:
+- Installed and configured Minikube for local Kubernetes.
+- Initialized a local single-node Kubernetes cluster.
+- Learned and validated Kubernetes core concepts:
+  - Pods
+  - Deployments
+  - Services (NodePort)
+
+- Deployed autoops-ai using Kubernetes manifests.
+
+- Exposed the application locally via NodePort.
+
+- Verified application behavior inside a Kubernetes runtime.
