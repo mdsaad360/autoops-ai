@@ -252,7 +252,7 @@ curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json"
 
 - Exposed the application via EC2 public IP over HTTP.
 
-<img src="images/aws-ec2-autoops-ai-ub.png" alt="AWS EC2 Instance" width="800"/>
+<img src="images/EC2/aws-ec2-autoops-ai-ub.png" alt="AWS EC2 Instance" width="800"/>
 
 ## Setup Instructions
 
@@ -299,7 +299,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 sudo docker run hello-world
 ```
 
-<img src="images/verify-docker-install.png" alt="Example verify output" width="800"/>
+<img src="images/EC2/verify-docker-install.png" alt="Example verify output" width="800"/>
 
 ```bash
 # 8. Manage Docker as a non-root user (For this change to take effect, you must log out of your SSH session and log back in. )
@@ -315,11 +315,85 @@ docker run -d -p 8000:8000 mdsaad360/autoops-ai:latest
 docker ps
 ```
 
-<img src="images/docker-run-ec2.png" alt="Docker run on ec2" width="800"/>
+<img src="images/EC2/docker-run-ec2.png" alt="Docker run on ec2" width="800"/>
 
 ### 5. Verify the app
 ```bash
 #Run below outside instance to verfiy the app is running
 curl http://<EC2_PUBLIC_IP>:8000/health
 ```
-<img src="images/verify-app-8000.png" alt="Verify app is running" width="800"/>
+
+<img src="images/EC2/verify-app-8000.png" alt="Verify app is running" width="800"/>
+
+## Phase 6c - Host autoops-ai on AWS EKS (HTTP via ALB)
+
+✅ Features implemented:
+- Installed and configured AWS CLI.
+- Created an EKS cluster via a config file( cluster.yaml ).
+- Generated and updated kubeconfig using AWS CLI.
+- Deployed autoops-ai using Kubernetes manifests( deployment.yaml ).
+- Created Kubernetes LoadBalancer Service( service-lb.yaml ).
+- Exposed application publicly via ALB DNS over HTTP.
+
+## Setup Instructions
+
+###  1. Install and configure AWS CLI
+```bash
+pip install awscli --upgrade --user
+
+aws configure   # set access key, secret, region, default output
+```
+
+### 2. Create an EKS Cluster
+```bash
+kubectl create cluster -f cluster.yaml
+```
+<img src="images/EKS/ekscktl-create-cluster.png" alt="Create an EKS cluster" width="800"/>
+
+### 3. Create and verify app deployment and load balancer service
+```bash
+aws eks update-kubeconfig --region us-east-1 --name autoops-ai-eks
+```
+
+<img src="images/EKS/verify-cluster-creation.png" alt="Create and Update kubeconfig" width="800"/>
+
+```bash
+kubectl apply -f deployment.yaml
+
+kubectl apply -f serivce-lb.yaml
+```
+
+<img src="images/EKS/Phase1/create-deployment-alb.png" alt="Apply k8s manifests" width="500"/>
+
+```bash
+kubect get deployments
+
+kubectl get pods -o wide
+
+kubectl get svc autoops-ai-lb
+```
+
+<img src="images/EKS/Phase1/k-get-deploy-pods.png" alt="Get deployments, pods, lb service" width="800"/>
+
+### 4. Test the app
+```bash
+curl http://<LB_DNS>/health
+
+curl http://<LB_DNS>/predict -H "Content-Type: application/json" -d '{"text":"I love DragonFruit!"}'
+``` 
+
+- Bash
+
+<img src="images/EKS/Phase1/test-app-bash.png" alt="Test result from bash" width="800"/>
+
+- Postman
+
+<img src="images/EKS/Phase1/test-app-postman-predict.png" alt="Test result from postman" width="800"/>
+
+- Web - health endpoint
+
+<img src="images/EKS/Phase1/test-app-web-health.png" alt="Test result from web for health endpoint" width="800"/>
+
+- Web - Documentation 
+
+<img src="images/EKS/Phase1/test-app-web-docs.png" alt="Test result from web for documentation" width="800"/>
