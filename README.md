@@ -329,10 +329,10 @@ curl http://<EC2_PUBLIC_IP>:8000/health
 
 ✅ Features implemented:
 - Installed and configured AWS CLI.
-- Created an EKS cluster via a config file( cluster.yaml ).
+- Created an EKS cluster via a config file( [cluster.yaml](https://github.com/mdsaad360/autoops-ai-gitops/blob/main/base/cluster.yaml) ).
 - Generated and updated kubeconfig using AWS CLI.
-- Deployed autoops-ai using Kubernetes manifests( deployment.yaml ).
-- Created Kubernetes LoadBalancer Service( service-lb.yaml ).
+- Deployed autoops-ai using Kubernetes manifests( [deployment.yaml](https://github.com/mdsaad360/autoops-ai-gitops/blob/main/base/deployment.yaml) ).
+- Created Kubernetes LoadBalancer Service( [service-lb.yaml](https://github.com/mdsaad360/autoops-ai-gitops/blob/main/base/service-lb.yaml) ).
 - Exposed application publicly via ALB DNS over HTTP.
 
 ## Setup Instructions
@@ -382,18 +382,63 @@ curl http://<LB_DNS>/health
 curl http://<LB_DNS>/predict -H "Content-Type: application/json" -d '{"text":"I love DragonFruit!"}'
 ``` 
 
-- Bash
+Bash
 
 <img src="images/EKS/Phase1/test-app-bash.png" alt="Test result from bash" width="800"/>
 
-- Postman
+Postman
 
 <img src="images/EKS/Phase1/test-app-postman-predict.png" alt="Test result from postman" width="800"/>
 
-- Web - health endpoint
+Web - health endpoint
 
 <img src="images/EKS/Phase1/test-app-web-health.png" alt="Test result from web for health endpoint" width="800"/>
 
-- Web - Documentation 
+Web - Documentation 
 
 <img src="images/EKS/Phase1/test-app-web-docs.png" alt="Test result from web for documentation" width="800"/>
+
+## Phase 6d - Domain, TLS & HTTPS (Ingress + Route53)
+
+✅ Features implemented:
+
+- Purchased custom domain: autoops-ai.cloud.
+
+- Configured AWS Route53 Hosted Zone( DNS fundamentals - A, CNAME, Alias records).
+
+- Installed Ingress NGINX Controller on EKS.
+
+- Installed cert-manager for certificate automation.
+
+- Configured Let’s Encrypt ClusterIssuer( [cluster-issuer.yaml](https://github.com/mdsaad360/autoops-ai-gitops/blob/main/base/cluster-issuer.yaml) ).
+
+- Created Kubernetes Ingress resources( [autoops-ingress.yaml](https://github.com/mdsaad360/autoops-ai-gitops/blob/main/base/autoops-ingress.yaml) ).
+
+- Integrated HTTPS using TLS secrets.
+
+- Routed domain traffic to Ingress Load Balancer via Route53.
+
+- Exposed autoops-ai securely over HTTPS.
+
+### 
+Domain - GoDaddy
+
+<img src="images/EKS/Phase2/domain-godaddy-autoops-ai.png" alt="Domain ownership record - GoDaddy" width="800"/>
+
+Route53 HZ
+
+<img src="images/EKS/Phase2/route53-hz.png" alt="Route53 configuration" width="800"/>
+
+## Test results
+
+Web - health endpoint
+
+<img src="images/EKS/Phase2/test-web-health.png" alt="Test result from web for health endpoint" width="800"/>
+
+Web - Documentation
+
+<img src="images/EKS/Phase2/test-web-documentation.png" alt="Test result from web for documentation" width="800"/>
+
+Postman - predict endpoint
+
+<img src="images/EKS/Phase2/test-postman-predict.png" alt="Test result from postman for predict" width="800"/>
