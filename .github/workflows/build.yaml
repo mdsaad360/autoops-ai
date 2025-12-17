@@ -3,8 +3,14 @@ name: Test & Build Pipeline
 on: 
   push:
     branches: [ "main"]
+    paths-ignore:
+      - 'README.md'
+      - 'images/**'
   pull_request:
     branches: [ "main" ]
+    paths-ignore:
+      - 'README.md'
+      - 'images/**'
 
 jobs:
   build-test:
