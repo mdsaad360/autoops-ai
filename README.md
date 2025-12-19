@@ -329,10 +329,10 @@ curl http://<EC2_PUBLIC_IP>:8000/health
 
 ✅ Features implemented:
 - Installed and configured AWS CLI.
-- Created an EKS cluster via a config file( [cluster.yaml](https://github.com/mdsaad360/autoops-ai-gitops/blob/main/base/cluster.yaml) ).
+- Created an EKS cluster via a config file( [cluster.yaml](https://github.com/mdsaad360/autoops-ai-gitops/blob/main/cluster.yaml) ).
 - Generated and updated kubeconfig using AWS CLI.
 - Deployed autoops-ai using Kubernetes manifests( [deployment.yaml](https://github.com/mdsaad360/autoops-ai-gitops/blob/main/base/deployment.yaml) ).
-- Created Kubernetes LoadBalancer Service( [service-lb.yaml](https://github.com/mdsaad360/autoops-ai-gitops/blob/main/base/service-lb.yaml) ).
+- Created Kubernetes LoadBalancer Service( [service-lb.yaml](https://github.com/mdsaad360/autoops-ai-gitops/blob/main/service-lb.yaml) ).
 - Exposed application publicly via ALB DNS over HTTP.
 
 ## Setup Instructions
@@ -346,7 +346,7 @@ aws configure   # set access key, secret, region, default output
 
 ### 2. Create an EKS Cluster
 ```bash
-kubectl create cluster -f cluster.yaml
+eksctl create cluster -f cluster.yaml
 ```
 <img src="images/EKS/ekscktl-create-cluster.png" alt="Create an EKS cluster" width="800"/>
 
@@ -423,7 +423,7 @@ Web - Documentation
 ### 
 Domain - GoDaddy
 
-<img src="images/EKS/Phase2/domain-godaddy-autoops-ai.png" alt="Domain ownership record - GoDaddy" width="800"/>
+<img src="images/EKS/Phase2/domain-godaddy-autoops-ai.png" alt="Domain ownership record - GoDaddy" width="400"/>
 
 Route53 HZ
 
@@ -454,3 +454,21 @@ Postman - predict endpoint
 - Established declarative infrastructure management.
 
 - Enabled version-controlled deployments.
+
+## Phase 7b - Install ArgoCD on EKS & link ArgoCD to the GitOps Repository
+
+✅ Features implemented:
+
+- Installed ArgoCD in EKS cluster.
+
+- Exposed ArgoCD UI securely and retrieved and updated admin credentials.
+
+- Created ArgoCD Application resource and linked ArgoCD to the GitOps repository( [argocd.yaml](https://github.com/mdsaad360/autoops-ai-gitops/blob/main/argocd.yaml) )
+
+- Enabled automatic synchronization.
+
+- Ensured cluster state always matches Git state.
+
+ArgoCD UI
+
+<img src="images/EKS/Phase2/login-argocd.png" alt="ArgoCD UI" width="800"/> 
