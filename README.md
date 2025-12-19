@@ -442,3 +442,15 @@ Web - Documentation
 Postman - predict endpoint
 
 <img src="images/EKS/Phase2/test-postman-predict.png" alt="Test result from postman for predict" width="800"/>
+
+## Phase 7a - GitOps Repository Creation
+
+✅ Features implemented:
+
+- Created a dedicated GitOps repository( [autoops-ai GitOps repo](https://github.com/mdsaad360/autoops-ai-gitops) ).
+
+- Uploaded Kubernetes manifests to the gitops repo( [K8s manifests](https://github.com/mdsaad360/autoops-ai-gitops/tree/main/base) ).
+
+- Established declarative infrastructure management.
+
+- Enabled version-controlled deployments.
