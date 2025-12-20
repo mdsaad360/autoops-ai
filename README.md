@@ -472,3 +472,69 @@ Postman - predict endpoint
 ArgoCD UI
 
 <img src="images/EKS/Phase2/login-argocd.png" alt="ArgoCD UI" width="800"/> 
+
+## Phase 7c - End to End CI/CD Validation
+
+✅ Features implemented:
+
+- GitHub Actions builds and pushes Docker images( [Workflow : build.yaml](https://github.com/mdsaad360/autoops-ai/blob/main/.github/workflows/build.yaml) | [Docker Hub : autoops-ai](https://github.com/mdsaad360/autoops-ai-gitops/blob/main/base/deployment.yaml) ).
+
+- Image tags automatically updated in GitOps repo( [Line no. 17 at deployment.yaml](https://github.com/mdsaad360/autoops-ai-gitops/blob/main/base/deployment.yaml) ) .
+
+- ArgoCD detects Git changes and deploys new versions.
+
+- Rolling updates replace old pods automatically.
+
+- Verified zero-downtime deployments.
+
+Snippet responsible for updating the image tag in the gitops repo
+
+<img src="images/EKS/Phase2/code-update-img-gitops.png" alt="Code to update image tag in the gitops repo" width="800"/> 
+
+Automatic image update in the gitops repo
+
+<img src="images/EKS/Phase2/img-update-gitops-commit.PNG" alt="Image tag in the gitops repo updated automatically" width="800"/>
+
+<img src="images/EKS/Phase2/img-update-gitops-history.png" alt="Image tag update comparison in the gitops repo" width="800"/>
+
+## CICD Result
+
+Old image in DHCR
+
+<img src="images/EKS/Phase2/dhcr-old-img.PNG" alt="Old image in DHCR" width="800"/>
+
+Old image in k8s/ArgoCD UI
+
+<img src="images/EKS/Phase2/argocd-old-img.png" alt="Old image in k8s/ArgoCD UI" width="800"/>
+
+New image built and pushed to DHCR
+
+<img src="images/EKS/Phase2/build-new-image.png" alt="New image built" width="800"/>
+
+New image in DHCR
+
+<img src="images/EKS/Phase2/dhcr-new-img.PNG" alt="New image in DHCR" width="800"/>
+
+New image tag updated in the gitops repo
+
+<img src="images/EKS/Phase2/new-img-update-in-gitops.png" alt="Image tag updated in the gitops repo" width="800"/>
+
+New image update rolling in ArgoCD UI
+
+<img src="images/EKS/Phase2/new-img-update-rolling.PNG" alt="New image rolling and replacing old pods" width="800"/>
+
+New image updated in k8s/ArgoCD UI
+
+<img src="images/EKS/Phase2/new-img-updated-k8s.PNG" alt="New updated rolled out completely" width="800"/>
+
+Healthy ArgoCD Setup!
+
+<img src="images/EKS/Phase2/argoCD UI.png" alt="ArgoCd setup successful" width="800"/>
+
+## Future  Enhancements:
+
+- [ ] **AI Model Upgrade**: Transition to more advanced models
+- [ ] **Helm Modularization**: Package Kubernetes manifests into **Helm Charts** to simplify deployment and versioning across environments.
+- [ ] **Infrastructure as Code (IaC)**: Fully automate the AWS setup using **Terraform** to ensure a reproducible and scalable environment.
+- [ ] **Observability Stack**: Implement a monitoring and alerting system using **Prometheus and Grafana** for real-time cluster health insights.
+- [ ] **CI/CD Integration**: Extend GitOps workflows to include security scanning with **GitHub Actions**.
