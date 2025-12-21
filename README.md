@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![CI/CD Pipeline](https://github.com/mdsaad360/AutoOps-AI/actions/workflows/build.yaml/badge.svg)](https://github.com/mdsaad360/AutoOps-AI/actions/workflows/build.yaml)
 
-AutoOps AI is a portfolio project demonstrating DevOps + MLOps practices:
+AutoOps AI is a portfolio project demonstrating DevOps practices:
 
 - 🚀 **FastAPI** microservice with `/health` and `/predict`
 - 🐳 Containerization with **Docker** and Orchestration with **Kubernetes**
@@ -182,7 +182,7 @@ curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json"
 
 curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json" -d '{"text":"I hate dragon fruit"}'
 ```
-## Expected Ouput
+## Expected Output
 ```json
 {
   "input": "I love coding",
@@ -319,7 +319,7 @@ docker ps
 
 ### 5. Verify the app
 ```bash
-#Run below outside instance to verfiy the app is running
+#Run below outside instance to verify the app is running
 curl http://<EC2_PUBLIC_IP>:8000/health
 ```
 
